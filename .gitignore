@@ -1,0 +1,9 @@
+# W2 ingestion: 可再生成 / 本机产物不进仓库
+store/
+__pycache__/
+*.npz
+*.npy
+.env
+.venv/
+venv/
+# 模型缓存不进仓库, Mac 上首次运行自动下载

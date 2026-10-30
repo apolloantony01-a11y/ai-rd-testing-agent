@@ -1,0 +1,8 @@
+{
+  "topk": 5,
+  "hits": 20,
+  "total": 20,
+  "rate": 1.0,
+  "failures": [],
+  "note": "当前为 tfidf 基线 + 规则重排版, 非语义 embedding 版成绩"
+}

@@ -1,0 +1,24 @@
+{
+  "top1": 4,
+  "topk": 5,
+  "hits": 7,
+  "total": 10,
+  "failures": [
+    {
+      "q": "放大特效在播放过程中大小一直不变，像定格了一样",
+      "expect": "zoom_pop",
+      "top3": "week1-demand-canvas-selection.md#8; M1-5/COMPARISON.md#6; M1-5/COMPARISON.md#5"
+    },
+    {
+      "q": "没有配乐的模板一跑起来就停不下来，一直转圈出不了片",
+      "expect": "data_chart",
+      "top3": "M1-4/demo/template.json#1; README.md#0; M1-模板引擎任务清单.md#2"
+    },
+    {
+      "q": "静态图片当视频素材时，默认的播放速率和导出速率对不上",
+      "expect": "render.py",
+      "top3": "M1-1/template.schema.json#5; M1-4/README.md#3; M1-4/README.md#2"
+    }
+  ],
+  "note": "tfidf 基线 + 规则重排版, 严格来源命中(无关键词兜底), 非语义 embedding 版成绩"
+}

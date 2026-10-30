@@ -1,0 +1,7 @@
+numpy>=1.26
+# 可选, 装了才启用语义版(默认不装, 先用 tfidf 基线跑通骨架):
+# sentence-transformers>=2.7
+# torch -- 按 sentence-transformers 官方指引装对应平台版本
+# 模型(首次运行自动下载, 离线可用, 数据不出本机):
+#   EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
+# 交叉编码器重排(选型4)同理, 待 W2 调参时再装, 当前用规则重排.
