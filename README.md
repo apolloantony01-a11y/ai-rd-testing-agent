@@ -10,7 +10,7 @@
 无 Docker 的连锁影响(诚实标注):
 - pgvector -> 本地 numpy 向量库(store/): 无服务端, 无需 Docker, 数据在本地文件, 换 pgvector 时接口不变。
 - Redis 队列 -> W4 再定, W2 不需要队列。
-- Dify 本地部署同样要 Docker, 所以 W4 的 Dify 版改为 Dify Cloud/托管试用或工作流设计导出, 不在本机装 Docker 版; 若之后装了 Docker Desktop, 可 revert 回本地 Dify + pgvector + Redis 的 Compose 方案, 架构图不变。
+- Dify 本地部署同样要 Docker, 所以 W4 的 Dify 版改为 Dify Cloud/托管试用或工作流设计导出, 不在本机装 Docker 版; 若之后装了 Docker Desktop, 可 revert 回本地 Dify + pgvector + Redis 的 Compose 方案, 架构图不变。2026-10-30 晚 Lu 已选装 Docker Desktop: docker-compose.yml 已备好(先起 pgvector + Redis, API/Dify 留 W4 接), 装好并验证后本条即改为 Compose 方案, 不再走 Cloud 替代。
 
 跑法(本会话已跑通, 见 evaluation_report.json):
   python3 ingest.py --source <模板引擎目录> --source <week1文档> --out ./store

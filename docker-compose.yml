@@ -1,0 +1,57 @@
+# Compose 回切方案(2026-10-30 晚, Lu 选装 Docker Desktop 后准备)
+# 定位: 先起基础设施(pgvector + Redis), API 与 Dify 留 W4 接, 不把没写好的服务硬塞进来。
+# 注意: 下面密码只是本机演示用占位, 不是生产密钥, 不要复用到任何真实账号。
+# Mac 上跑法(装好 Docker Desktop 后, 在仓库根目录):
+#   docker --version && docker compose version
+#   docker compose up -d db redis
+#   docker compose ps
+#   docker exec agent-pgvector psql -U agent -d agent_kb -c "CREATE EXTENSION IF NOT EXISTS vector;"
+# 停掉: docker compose down        连数据一起清掉: docker compose down -v
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: agent-pgvector
+    environment:
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: agent-local-dev
+      POSTGRES_DB: agent_kb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent -d agent_kb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: agent-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # api: W4 再接, 不先占位:
+  #   build: .
+  #   command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+  #   ports: ["8000:8000"]
+  #   environment:
+  #     DATABASE_URL: postgresql://agent:agent-local-dev@db:5432/agent_kb
+  #     REDIS_URL: redis://redis:6379/0
+  #   depends_on:
+  #     db: {condition: service_healthy}
+  #     redis: {condition: service_healthy}
+
+  # dify: 不合并进本文件。Dify 官方 Compose 自带一整套服务, W4 时按官方 Compose 单独起,
+  #   或继续用 Dify Cloud, 两者二选一, 不混在一个 compose 里。
+
+volumes:
+  pgdata:
+  redisdata:
