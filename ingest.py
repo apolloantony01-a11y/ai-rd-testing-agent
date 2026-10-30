@@ -100,8 +100,17 @@ def chunk_file(path: Path, rel: str):
     return out
 
 
+SKIP_DIRS = {".venv", "venv", ".git", "node_modules", "__pycache__",
+             "store", ".tox", ".pytest_cache", ".mypy_cache"}
+
+
 def collect(sources):
-    """sources 可为目录或单个文件; 只收 .md/.py/.json 文本."""
+    """sources 可为目录或单个文件; 只收 .md/.py/.json 文本.
+
+    跳过虚拟环境、版本库、依赖目录和隐藏目录: 2026-10-30 Mac 实测,
+    template-engine 下的 .venv 曾贡献 589 个第三方库文件, 污染知识库,
+    旧版只排 __pycache__ 是漏网之源, 故改为按目录名 + 隐藏目录双重排除.
+    """
     files = []
     for s in sources:
         p = Path(s).expanduser()
@@ -109,8 +118,12 @@ def collect(sources):
             files.append(p)
         elif p.is_dir():
             for f in sorted(p.rglob("*")):
-                if f.is_file() and f.suffix.lower() in (".md", ".py", ".json") \
-                        and "__pycache__" not in str(f):
+                if not f.is_file():
+                    continue
+                if any(part in SKIP_DIRS or part.startswith(".")
+                       for part in f.parts):
+                    continue
+                if f.suffix.lower() in (".md", ".py", ".json"):
                     files.append(f)
         else:
             print(f"警告: 来源不存在, 跳过: {s}", file=sys.stderr)
